@@ -119,7 +119,7 @@ def solve_langevin(x0,y0,G_scale,Nt):
 
 def main_compute(G_scale,Nt,t, x0,y0,Nx):
 
-    write_disp_to_file  = True
+    write_disp_to_file  = False
     plot_trajectories   = False
     plot_scat_snapshots = False
     plot_hist_snapshots = False
@@ -227,7 +227,7 @@ if __name__ == '__main__':
         print '\nTime step dt = ',dt
         print 'The scale of the Gaussian = ',G_scale
 
-        t1=dt###temp
+        ##t1 = dt  # only if testing one step
         Nt = int((t1-t0)/dt)            # total number of time steps
         t = np.linspace(dt,t1, num=Nt)  # list of discrete time
 
