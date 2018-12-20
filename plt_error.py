@@ -27,7 +27,7 @@ def plot_data(ax, t,x):
     ax.set_ylim(2e-4, 3e-2)
 
     ax.set_xlabel(r'$\Delta t$')
-    ax.set_ylabel(r'$\langle r \rangle$')
+    ax.set_ylabel(r'$\langle r \rangle /a$')
 
     ax.get_xaxis().set_tick_params(which='both', direction='in')
     ax.get_yaxis().set_tick_params(which='both', direction='in')

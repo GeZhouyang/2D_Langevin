@@ -44,6 +44,8 @@ def plot_scat(ax, x,y):
     ax.get_xaxis().set_tick_params(which='both', direction='in')
     ax.get_yaxis().set_tick_params(which='both', direction='in')
 
+    #plt.axis('off')
+
     return ax
 
 def plot_hist(ax, r,Nx,t):
@@ -121,7 +123,8 @@ def main_compute(G_scale,Nt,t, x0,y0,Nx):
 
     write_disp_to_file  = False
     plot_trajectories   = False
-    plot_scat_snapshots = False
+    plot_scat_snapshots = True
+    plot_scat_meansnaps = False
     plot_hist_snapshots = False
 
     x_all,y_all = [],[] # list of samples
@@ -156,7 +159,7 @@ def main_compute(G_scale,Nt,t, x0,y0,Nx):
         plt.savefig('trajectory_one.png', bbox_inches='tight', transparent=False)
         plt.show()
 
-    if plot_scat_snapshots or plot_hist_snapshots:
+    if plot_scat_snapshots or plot_scat_meansnaps or plot_hist_snapshots:
         
         t_inserted = np.insert(t,0,0)  # insert 0 to the beginning of t
         x_transpose = map(list, zip(*x_all))
@@ -165,12 +168,18 @@ def main_compute(G_scale,Nt,t, x0,y0,Nx):
         for i in range(len(t_inserted)):
 
             fig, ax = plt.subplots(1, 1, sharey=True)
-            fig.set_size_inches(8,8)
+            fig.set_size_inches(4,4)#(8,8)
 
             if plot_scat_snapshots:
 
                 ax = plot_scat(ax, x_transpose[i],y_transpose[i])
-                plt.savefig('scat-'+('%0.2e' % t[0])+'/scat'+str(i).zfill(6)+'.png',
+                plt.savefig('scat-'+('%0.2e' % t[0])+'_only1/scat'+str(i).zfill(6)+'.png',
+                            bbox_inches='tight', transparent=False)
+
+            if plot_scat_meansnaps:
+
+                ax = plot_scat(ax, x_avr[i],y_avr[i])
+                plt.savefig('scat-'+('%0.2e' % t[0])+'_mean/scat'+str(i).zfill(6)+'.png',
                             bbox_inches='tight', transparent=False)        
 
             if plot_hist_snapshots:
@@ -200,8 +209,8 @@ if __name__ == '__main__':
 
     x0,y0 = 0.,0.   # starting position [1]
     t0 = 0.         # starting time [s]
-    #t1 = 40.        # end time [s]
-    Nx = 20000      # number of samples (the ensemble)
+    t1 = 20.        # end time [s]
+    Nx = 5000      # number of samples (the ensemble)
 
     T   = 300.      # temperature (Kelvin)
     eta = 1e-3      # dynamic viscosity of water [Pa*s]
@@ -211,8 +220,8 @@ if __name__ == '__main__':
     alpha = 6.*pi*eta*a    # Stokes drag coef
     D_coef = k_B*T/alpha   # diffusion coef
     
-    #dtl = [10,5,2,1,5e-1,2e-1,1e-1]   # time step
-    dtl = [5e-2]
+    #dtl = [2,1,5e-1,2e-1,1e-1,5e-2,2e-2]   # time step
+    dtl = [2e-1]
     
     #--- main solve ---#
     
